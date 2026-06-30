@@ -1,0 +1,5 @@
+.vscode/**
+test-core.js
+_test_*.pdf
+**/*.map
+.gitignore

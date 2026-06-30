@@ -1,0 +1,81 @@
+{
+  "name": "md2pdf-onepage-vscode",
+  "displayName": "Markdown → 連続1ページPDF",
+  "description": "Markdown を末尾余白のない連続1ページPDFに変換します（Puppeteer製・画像対応）。",
+  "version": "1.0.0",
+  "publisher": "local",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onCommand:md2pdfOnepage.convert"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "md2pdfOnepage.convert",
+        "title": "連続1ページPDFに変換",
+        "category": "md2pdf-onepage"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "resourceExtname == .md",
+          "command": "md2pdfOnepage.convert",
+          "group": "navigation@99"
+        }
+      ],
+      "editor/context": [
+        {
+          "when": "resourceExtname == .md",
+          "command": "md2pdfOnepage.convert",
+          "group": "navigation@99"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "when": "resourceExtname == .md",
+          "command": "md2pdfOnepage.convert"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "md2pdf-onepage",
+      "properties": {
+        "md2pdfOnepage.width": {
+          "type": "number",
+          "default": 210,
+          "description": "ページ幅（mm）"
+        },
+        "md2pdfOnepage.margin": {
+          "type": "number",
+          "default": 15,
+          "description": "余白（mm）"
+        },
+        "md2pdfOnepage.cssPath": {
+          "type": "string",
+          "default": "",
+          "description": "適用するCSSの絶対パス（空なら同梱 default.css）"
+        },
+        "md2pdfOnepage.openAfter": {
+          "type": "boolean",
+          "default": true,
+          "description": "生成後にPDFを開く"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "test:core": "node test-core.js"
+  },
+  "dependencies": {
+    "markdown-it": "^14.2.0",
+    "puppeteer": "^25.2.1"
+  }
+}

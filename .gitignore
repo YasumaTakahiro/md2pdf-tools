@@ -1,0 +1,12 @@
+# 依存とビルド成果物
+node_modules/
+*.vsix
+
+# OS / エディタ
+.DS_Store
+Thumbs.db
+*.log
+
+# 変換テストの一時出力
+_test_*.pdf
+.__md2pdf_*.html

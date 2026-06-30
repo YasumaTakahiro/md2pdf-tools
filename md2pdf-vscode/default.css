@@ -1,0 +1,66 @@
+/* md2pdf-onepage (VSCode拡張) 既定スタイル。設定 md2pdfOnepage.cssPath で差し替え可能 */
+
+#__doc {
+  font-family: -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN",
+    "Yu Gothic", Meiryo, sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #24292f;
+}
+
+#__doc h1 { font-size: 1.8em; border-bottom: 1px solid #d0d7de; padding-bottom: 0.3em; }
+#__doc h2 { font-size: 1.5em; border-bottom: 1px solid #d8dee4; padding-bottom: 0.25em; }
+#__doc h3 { font-size: 1.3em; }
+#__doc h4 { font-size: 1.1em; }
+
+#__doc p { margin: 0.6em 0; }
+
+#__doc a { color: #0969da; text-decoration: none; }
+
+#__doc hr { border: 0; border-top: 1px solid #d0d7de; margin: 1.4em 0; }
+
+/* 画像: 薄い枠線 + 中央寄せ */
+#__doc img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 2px;
+  box-sizing: border-box;
+  display: block;
+  margin: 0.6em auto;
+}
+
+/* 表 */
+#__doc table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.92em;
+  margin: 0.8em 0;
+}
+#__doc th, #__doc td { border: 1px solid #333; padding: 8px 12px; }
+#__doc th { background-color: #f0f0f0; font-weight: bold; }
+#__doc tr:nth-child(even) { background-color: #fafafa; }
+
+/* コード */
+#__doc code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.9em;
+  background: #f6f8fa;
+  padding: 0.15em 0.35em;
+  border-radius: 4px;
+}
+#__doc pre {
+  background: #f6f8fa;
+  padding: 12px 14px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+#__doc pre code { background: transparent; padding: 0; }
+
+#__doc blockquote {
+  margin: 0.8em 0;
+  padding: 0.2em 1em;
+  color: #57606a;
+  border-left: 4px solid #d0d7de;
+}

@@ -1,0 +1,22 @@
+{
+  "name": "md2pdf-onepage",
+  "version": "1.0.0",
+  "description": "Markdown を末尾余白のない連続1ページPDFに変換するCLI（Puppeteer製）",
+  "type": "module",
+  "bin": {
+    "md2pdf-onepage": "bin/cli.mjs"
+  },
+  "files": [
+    "bin/",
+    "default.css",
+    "README.md"
+  ],
+  "scripts": {
+    "start": "node bin/cli.mjs"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "markdown-it": "^14.2.0",
+    "puppeteer": "^25.2.1"
+  }
+}
