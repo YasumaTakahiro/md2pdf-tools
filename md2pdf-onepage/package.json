@@ -16,7 +16,9 @@
   },
   "license": "MIT",
   "dependencies": {
+    "github-slugger": "^2.0.0",
     "markdown-it": "^14.2.0",
+    "markdown-it-anchor": "^9.2.0",
     "puppeteer": "^25.2.1"
   }
 }

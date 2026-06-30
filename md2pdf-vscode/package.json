@@ -12,36 +12,54 @@
     "Other"
   ],
   "main": "./extension.js",
-  "activationEvents": [
-    "onCommand:md2pdfOnepage.convert"
-  ],
   "contributes": {
     "commands": [
       {
         "command": "md2pdfOnepage.convert",
-        "title": "連続1ページPDFに変換",
-        "category": "md2pdf-onepage"
+        "title": "PDFに変換(1ページ)",
+        "category": "md2pdf"
+      },
+      {
+        "command": "md2pdfOnepage.convertPaged",
+        "title": "PDFに変換(改ページあり)",
+        "category": "md2pdf"
+      }
+    ],
+    "submenus": [
+      {
+        "id": "md2pdf.submenu",
+        "label": "md2pdf"
       }
     ],
     "menus": {
       "explorer/context": [
         {
           "when": "resourceExtname == .md",
-          "command": "md2pdfOnepage.convert",
+          "submenu": "md2pdf.submenu",
           "group": "navigation@99"
         }
       ],
       "editor/context": [
         {
           "when": "resourceExtname == .md",
-          "command": "md2pdfOnepage.convert",
+          "submenu": "md2pdf.submenu",
           "group": "navigation@99"
         }
       ],
       "editor/title/context": [
         {
           "when": "resourceExtname == .md",
-          "command": "md2pdfOnepage.convert"
+          "submenu": "md2pdf.submenu"
+        }
+      ],
+      "md2pdf.submenu": [
+        {
+          "command": "md2pdfOnepage.convertPaged",
+          "group": "navigation@1"
+        },
+        {
+          "command": "md2pdfOnepage.convert",
+          "group": "navigation@2"
         }
       ]
     },
@@ -75,7 +93,9 @@
     "test:core": "node test-core.js"
   },
   "dependencies": {
+    "github-slugger": "^2.0.0",
     "markdown-it": "^14.2.0",
+    "markdown-it-anchor": "^9.2.0",
     "puppeteer": "^25.2.1"
   }
 }
