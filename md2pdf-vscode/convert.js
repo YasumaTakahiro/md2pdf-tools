@@ -118,9 +118,10 @@ async function launchBrowser() {
  * @param {('chapter'|'section')} [opts.breakMode] paged 時の改ページ方法（既定 chapter）
  *   chapter: 章(## 見出し)ごとに必ず改ページ
  *   section: 詰めて流し込み、節が分断される時だけ次ページへ送る
- * @returns {Promise<{out:string,widthMm:number,heightMm:number,paged:boolean,breakMode:string}>}
+ * @param {('pdf'|'html')} [opts.mode] 出力形式（既定 pdf）。html はレンダリング後のHTMLを保存（検証用）
+ * @returns {Promise<{out:string,mode:string,widthMm:number,heightMm:number,paged:boolean,breakMode:string}>}
  */
-async function convert({ input, out, widthMm = 210, marginMm = 15, cssPath, paged = false, breakMode = 'chapter' }) {
+async function convert({ input, out, widthMm = 210, marginMm = 15, cssPath, paged = false, breakMode = 'chapter', mode = 'pdf' }) {
   // paged はA4縦固定（幅指定は無視）
   if (paged) widthMm = 210;
   if (breakMode !== 'section') breakMode = 'chapter';
@@ -277,6 +278,14 @@ ${css}
       }, { wrapLevel: 3, doSections: true });
     }
 
+    // 検証用HTML出力：レンダリング・DOM加工後のHTMLをそのまま保存する。
+    // <base> が絶対URLで埋まっているため、保存先からでも画像が解決できる。
+    if (mode === 'html') {
+      const finalHtml = await page.content();
+      await writeFile(out, finalHtml, 'utf8');
+      return { out, mode: 'html', widthMm, heightMm: 0, paged, breakMode };
+    }
+
     if (paged) {
       await page.pdf({
         path: out,
@@ -284,7 +293,7 @@ ${css}
         printBackground: true,
         preferCSSPageSize: true,
       });
-      return { out, widthMm, heightMm: 297, paged: true, breakMode };
+      return { out, mode: 'pdf', widthMm, heightMm: 297, paged: true, breakMode };
     }
 
     const heightPx = await page.evaluate(() => {
@@ -302,7 +311,7 @@ ${css}
       pageRanges: '1',
     });
 
-    return { out, widthMm, heightMm: (heightPx * 25.4) / 96, paged: false, breakMode };
+    return { out, mode: 'pdf', widthMm, heightMm: (heightPx * 25.4) / 96, paged: false, breakMode };
   } finally {
     await browser.close();
     try {
@@ -313,4 +322,16 @@ ${css}
   }
 }
 
-module.exports = { convert, mmToPx };
+/**
+ * 同梱の default.css を指定パスへ書き出す（ユーザーがCSSを編集して使うため）。
+ * @param {string} destPath 出力先の絶対パス
+ * @returns {Promise<string>} 書き出したパス
+ */
+async function exportDefaultCss(destPath) {
+  const src = path.join(__dirname, 'default.css');
+  const css = await readFile(src, 'utf8');
+  await writeFile(destPath, css, 'utf8');
+  return destPath;
+}
+
+module.exports = { convert, mmToPx, exportDefaultCss };

@@ -19,6 +19,8 @@
  *                        いずれも節・「文章＋画像」は分断せず詰めて流し込む。
  *                          chapter: さらに章（## 見出し）を必ず新ページから開始
  *                          section: 章も改ページせず続けて流し込む
+ *   --emit-html          PDFと一緒に検証用HTML（<出力>.html）も書き出す
+ *   --export-css <path>  同梱の default.css を <path> に書き出して終了
  *   -h, --help           ヘルプ表示
  */
 import { readFile, writeFile, unlink } from 'node:fs/promises';
@@ -48,14 +50,16 @@ options:
                      どちらも節・「文章＋画像」は分断せず詰めて流し込む。
                        chapter: さらに章（## 見出し）を必ず新ページから開始
                        section: 章も改ページせず続けて流し込む
+  --emit-html        PDFと一緒に検証用HTML（<出力>.html）も書き出す
+  --export-css <path> 同梱の default.css を <path> に書き出して終了
   -h, --help         このヘルプ
 
 例:
   md2pdf-onepage User_Manual.md
   md2pdf-onepage User_Manual.md out.pdf --width 280 --margin 15
   md2pdf-onepage User_Manual.md --paged
-  md2pdf-onepage User_Manual.md --paged --break section
-  md2pdf-onepage README.md --css ./my-style.css
+  md2pdf-onepage User_Manual.md --paged --emit-html
+  md2pdf-onepage --export-css ./my-style.css
 `;
 
 function parseArgs(argv) {
@@ -68,6 +72,8 @@ function parseArgs(argv) {
     else if (a === '-o' || a === '--out') args.out = argv[++i];
     else if (a === '--paged') args.paged = true;
     else if (a === '--break') args.break = argv[++i];
+    else if (a === '--emit-html') args.emitHtml = true;
+    else if (a === '--export-css') args.exportCss = argv[++i];
     else if (a === '-h' || a === '--help') args.help = true;
     else args._.push(a);
   }
@@ -175,6 +181,15 @@ async function launchBrowser() {
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
+
+  // --export-css: 同梱の default.css を書き出して終了（変換はしない）
+  if (args.exportCss) {
+    const dest = resolve(args.exportCss);
+    const srcCss = join(PKG_ROOT, 'default.css');
+    await writeFile(dest, await readFile(srcCss, 'utf8'), 'utf8');
+    console.log('exported css:', dest);
+    return;
+  }
 
   if (args.help || args._.length === 0) {
     console.log(HELP);
@@ -355,6 +370,13 @@ ${css}
           }
         }
       }, { wrapLevel: 3, doSections: true });
+    }
+
+    // --emit-html: レンダリング・DOM加工後のHTMLを検証用に書き出す
+    if (args.emitHtml) {
+      const htmlOut = out.replace(/\.[^.\\/]+$/, '') + '.html';
+      await writeFile(htmlOut, await page.content(), 'utf8');
+      console.log('emit html:', htmlOut);
     }
 
     if (paged) {

@@ -1,7 +1,7 @@
 {
   "name": "md2pdf-onepage-vscode",
-  "displayName": "Markdown → 連続1ページPDF",
-  "description": "Markdown を末尾余白のない連続1ページPDFに変換します（Puppeteer製・画像対応）。",
+  "displayName": "md2pdf — Markdown を PDF に変換",
+  "description": "Markdown を右クリックで PDF に変換する VSCode/Cursor 拡張。末尾余白のない連続1ページ出力と、章ごとに改ページする A4縦出力に対応（Puppeteer製・画像/内部リンク対応）。",
   "version": "1.0.0",
   "publisher": "local",
   "license": "MIT",
@@ -22,6 +22,16 @@
       {
         "command": "md2pdfOnepage.convertPaged",
         "title": "PDFに変換(改ページあり)",
+        "category": "md2pdf"
+      },
+      {
+        "command": "md2pdfOnepage.emitHtml",
+        "title": "HTML(検証用)を出力",
+        "category": "md2pdf"
+      },
+      {
+        "command": "md2pdfOnepage.exportCss",
+        "title": "デフォルトCSSを出力",
         "category": "md2pdf"
       }
     ],
@@ -60,11 +70,19 @@
         {
           "command": "md2pdfOnepage.convert",
           "group": "navigation@2"
+        },
+        {
+          "command": "md2pdfOnepage.emitHtml",
+          "group": "tools@1"
+        },
+        {
+          "command": "md2pdfOnepage.exportCss",
+          "group": "tools@2"
         }
       ]
     },
     "configuration": {
-      "title": "md2pdf-onepage",
+      "title": "md2pdf",
       "properties": {
         "md2pdfOnepage.width": {
           "type": "number",
